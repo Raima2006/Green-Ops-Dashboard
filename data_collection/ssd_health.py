@@ -4,21 +4,17 @@ import pandas as pd
 from datetime import datetime
 import os
 
-LOG_FILE = "ssd_health_logs.csv"
+LOG_FILE = os.path.join("data_collection", "ssd_health_logs.csv")
 
 def get_ssd_metrics():
-    """Uses smartctl to fetch SSD health metrics."""
     try:
-        # Fixed 'capture_data' to 'capture_output'
-        # Using 'pd0' for physical drive 0 (standard for Windows)
         result = subprocess.run(['smartctl', '--json', '-a', 'pd0'], capture_output=True, text=True, check=True)
         data = json.loads(result.stdout)
         
-        # Extracting specific health indicators from NVMe log
         nvme_info = data.get('nvme_smart_health_information_log', {})
         
         if not nvme_info:
-            print("Warning: No NVMe health data found. Drive might be SATA.")
+            print("[WARNING] No NVMe health data found. Drive might be SATA.")
             return None
 
         metrics = {
@@ -30,11 +26,12 @@ def get_ssd_metrics():
         }
         return metrics
     except Exception as e:
-        print(f"Error reading SSD: {e}")
+        print(f"[ERROR] Reading SSD: {e}")
         return None
 
 def save_health_data(data):
     if data:
+        os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
         df = pd.DataFrame([data])
         if not os.path.isfile(LOG_FILE):
             df.to_csv(LOG_FILE, index=False)
@@ -42,13 +39,13 @@ def save_health_data(data):
             df.to_csv(LOG_FILE, mode='a', index=False, header=False)
 
 if __name__ == "__main__":
-    print("STARTING: SSD Health Monitoring...")
+    print("Starting SSD Health Monitoring...")
     try:
         stats = get_ssd_metrics()
         if stats:
             save_health_data(stats)
-            print(f"SUCCESS: SSD Health Logged | Wear Level: {stats['percentage_used']}% Used")
+            print(f"[SUCCESS] SSD Health Logged | Wear Level: {stats['percentage_used']}% Used")
         else:
-            print("FAILED: Could not retrieve data. Ensure you are in Administrator CMD.")
+            print("[FAILED] Could not retrieve data. Ensure execution as Administrator.")
     except KeyboardInterrupt:
-        print("\nSTOPPED: SSD Monitoring.")
+        print("\nSSD Monitoring stopped.")

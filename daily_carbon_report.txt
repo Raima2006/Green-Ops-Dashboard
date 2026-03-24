@@ -1,18 +1,19 @@
 
-    ================================================
-    🌱 GREEN-OPS DAILY SUSTAINABILITY REPORT
-    Generated on: 2026-03-23 22:01:03
-    ================================================
-    
-    STATISTICS:
-    - Total Monitoring Time: 1.12 hours
-    - Average CPU Load: 31.0%
-    - Estimated Carbon Produced: 11.7635 kg CO2
-    
-    HARDWARE HEALTH:
-    - SSD Wear Level: 2% used
-- Remaining Life Estimate: 98%
+================================================
+GREEN-OPS DAILY SUSTAINABILITY REPORT
+Generated on: 2026-03-24 20:53:14
+================================================
 
-SUGGESTION:
-✅ Your system is running efficiently!
+STATISTICS:
+- Total Monitoring Time     : 0.06 hours
+- Average CPU Load          : 11.1%
+- Estimated Carbon Produced : 0.2184 kg CO2
+- Grid Status at Generation : Dirty Supply (High Demand)
+
+HARDWARE HEALTH:
+- SSD Wear Level          : 5% used
+- Remaining Life Estimate : 95%
+
+SYSTEM SUGGESTION:
+[OK] System is running within efficient parameters.
 ================================================

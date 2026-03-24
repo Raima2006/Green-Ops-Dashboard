@@ -4,15 +4,13 @@ import time
 import os
 from datetime import datetime
 
-# Path to save our logs - keeping it inside the project folder
-LOG_FILE = "hardware_logs.csv"
+# Saving relative to the script's execution context
+LOG_FILE = os.path.join("data_collection", "hardware_logs.csv")
 
 def collect_pulse():
-    """Captures a single snapshot of hardware data."""
     battery = psutil.sensors_battery()
     cpu_usage = psutil.cpu_percent(interval=1)
     
-    # Data dictionary
     data = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "battery_percent": battery.percent if battery else 100,
@@ -23,16 +21,15 @@ def collect_pulse():
     return data
 
 def save_to_csv(data):
-    """Saves data to CSV. Creates the file if it doesn't exist."""
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
     df = pd.DataFrame([data])
-    # if file does not exist write header 
     if not os.path.isfile(LOG_FILE):
         df.to_csv(LOG_FILE, index=False)
-    else: # else it exists so append without writing the header
+    else:
         df.to_csv(LOG_FILE, mode='a', index=False, header=False)
 
 if __name__ == "__main__":
-    print("🚀 Green-Ops Data Collection Started...")
+    print("System Data Collection Started...")
     print(f"Recording data to {os.path.abspath(LOG_FILE)}")
     print("Press Ctrl+C to stop.")
     
@@ -40,7 +37,7 @@ if __name__ == "__main__":
         while True:
             pulse = collect_pulse()
             save_to_csv(pulse)
-            print(f"Synced @ {pulse['timestamp']} | Battery: {pulse['battery_percent']}% | CPU: {pulse['cpu_usage_percent']}%")
-            time.sleep(10) # Wait 10 seconds before next pulse
+            print(f"[{pulse['timestamp']}] SYNC | Battery: {pulse['battery_percent']}% | CPU: {pulse['cpu_usage_percent']}%")
+            time.sleep(10)
     except KeyboardInterrupt:
-        print("\n🛑 Collection stopped by user.")
+        print("\nCollection stopped by user.")
