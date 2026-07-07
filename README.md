@@ -172,7 +172,3 @@ Developed as part of an Industry Oriented Mini Project (IOMP) focused on sustain
 By- Raima Shasmeen and Noshank Fadiya
 
 ---
-
-## 📄 License
-
-This project is open-source and available under the MIT License.
